@@ -25,11 +25,30 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
+        async function testConnection() {
+            try {
+                const response = await fetch('http://10.8.85.181:9000/v1/completions', {
+                    method: 'HEAD'
+                });
+                return true;
+            } catch (error) {
+                console.error('Connection test failed:', error);
+                return false;
+            }
+        }
+
         async function sendMessage() {
             const userInput = document.getElementById('userInput');
             const message = userInput.value.trim();
             
             if (message === '') return;
+
+            // Test connection first
+            const isConnected = await testConnection();
+            if (!isConnected) {
+                appendMessage('Error: Cannot connect to the AI server. Please check if the server is running.', false);
+                return;
+            }
             
             // Display user message
             appendMessage(message, true);
