@@ -53,7 +53,7 @@
                 appendMessage(botResponse, false);
             } catch (error) {
                 console.error('Error:', error);
-                appendMessage('Sorry, I encountered an error.', false);
+                appendMessage(`Error: ${error.message}`, false);
             }
         }
 
