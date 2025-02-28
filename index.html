@@ -27,15 +27,20 @@
 
         async function testConnection() {
             try {
-                const response = await fetch('http://10.8.85.181:9000/v1/completions', {
+                const response = await fetch('http://10.8.85.181:9000/v1/chat/completions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': 'Bearer EMPTY'
                     },
                     body: JSON.stringify({
-                        model: 'unsloth/Phi4',
-                        prompt: "test",
+                        model: 'unsloth/phi4',
+                        messages: [{
+                            role: "user",
+                            content: "test"
+                        }],
                         max_tokens: 1,
+                        temperature: 0
                     }),
                 });
                 
@@ -78,20 +83,25 @@
             userInput.value = '';
 
             try {
-                const response = await fetch('http://10.8.85.181:9000/v1/completions', {
+                const response = await fetch('http://10.8.85.181:9000/v1/chat/completions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': 'Bearer EMPTY'
                     },
                     body: JSON.stringify({
                         model: 'unsloth/phi4',
-                        prompt: message,
+                        messages: [{
+                            role: "user",
+                            content: message
+                        }],
                         max_tokens: 50,
+                        temperature: 0
                     }),
                 });
 
                 const data = await response.json();
-                const botResponse = data.choices[0].text;
+                const botResponse = data.choices[0].message.content;
                 appendMessage(botResponse, false);
             } catch (error) {
                 console.error('Error:', error);
