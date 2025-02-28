@@ -28,12 +28,35 @@
         async function testConnection() {
             try {
                 const response = await fetch('http://10.8.85.181:9000/v1/completions', {
-                    method: 'HEAD'
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'unsloth/phi4',
+                        prompt: "test",
+                        max_tokens: 1,
+                    }),
                 });
-                return true;
+                
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    console.error('Server response not OK:', response.status, errorData);
+                    return {
+                        success: false,
+                        error: `Server error: ${response.status} - ${errorData}`
+                    };
+                }
+                
+                return {
+                    success: true
+                };
             } catch (error) {
                 console.error('Connection test failed:', error);
-                return false;
+                return {
+                    success: false,
+                    error: `Connection error: ${error.message}`
+                };
             }
         }
 
@@ -44,9 +67,9 @@
             if (message === '') return;
 
             // Test connection first
-            const isConnected = await testConnection();
-            if (!isConnected) {
-                appendMessage('Error: Cannot connect to the AI server. Please check if the server is running.', false);
+            const connectionTest = await testConnection();
+            if (!connectionTest.success) {
+                appendMessage(`Error: ${connectionTest.error}`, false);
                 return;
             }
             
