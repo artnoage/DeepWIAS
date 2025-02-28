@@ -8,7 +8,7 @@ class VLLMChatClient:
     def __init__(
         self,
         base_url: str = "http://10.8.85.181:9000/v1",
-        model: str = "unsloth/phi4",
+        model: str = "Phi-4",
         temperature: float = 0,
         api_key: str = "EMPTY"
     ):
