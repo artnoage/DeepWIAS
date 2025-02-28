@@ -1,0 +1,7 @@
+# For Gradio app
+gradio>=4.0.0
+requests
+
+# For Streamlit app
+streamlit>=1.30.0
+requests
