@@ -39,8 +39,16 @@ st.markdown("""
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display chat title
-st.markdown("<div class='chat-title'>DeepWIAS</div>", unsafe_allow_html=True)
+# Function to clear chat history
+def clear_chat():
+    st.session_state.messages = []
+
+# Display chat title and clear button
+col1, col2 = st.columns([5, 1])
+with col1:
+    st.markdown("<div class='chat-title'>DeepWIAS</div>", unsafe_allow_html=True)
+with col2:
+    st.button("Clear Chat", on_click=clear_chat)
 
 def test_connection():
     try:
@@ -83,10 +91,17 @@ for message in st.session_state.messages:
     else:
         st.markdown(f"<div class='bot-message'>{message['content']}</div>", unsafe_allow_html=True)
 
-# User input
-user_input = st.text_input("Type your message...", key="user_input")
+# User input with send button
+col1, col2 = st.columns([5, 1])
+with col1:
+    user_input = st.text_input("Type your message...", key="user_input")
+with col2:
+    send_button = st.button("Send")
 
-if user_input:
+# Process input when either the input field is submitted or send button is clicked
+if user_input and (st.session_state.user_input != "" or send_button):
+
+# This block is replaced by the new input handling above
     # Test connection first
     connection_test = test_connection()
     if not connection_test['success']:
@@ -126,6 +141,5 @@ if user_input:
         except Exception as e:
             st.error(f"Error: {str(e)}")
         
-        # Clear the input box
+        # Clear the input box - no need for experimental_rerun
         st.session_state.user_input = ""
-        st.experimental_rerun()
