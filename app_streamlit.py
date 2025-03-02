@@ -91,16 +91,9 @@ for message in st.session_state.messages:
     else:
         st.markdown(f"<div class='bot-message'>{message['content']}</div>", unsafe_allow_html=True)
 
-# User input with send button
-col1, col2 = st.columns([5, 1])
-with col1:
-    user_input = st.text_input("Type your message...", key="user_input")
-with col2:
-    send_button = st.button("Send")
-
 # Define a function to handle message submission
 def handle_message():
-    if st.session_state.user_input:
+    if st.session_state.user_input and st.session_state.user_input.strip():
         user_message = st.session_state.user_input
         # Test connection first
         connection_test = test_connection()
@@ -142,9 +135,13 @@ def handle_message():
         # Clear the input box
         st.session_state.user_input = ""
 
-# Process input when send button is clicked or enter is pressed
+# User input with send button
 col1, col2 = st.columns([5, 1])
 with col1:
-    st.text_input("Type your message...", key="user_input", on_change=handle_message if st.session_state.user_input else None)
+    st.text_input("Type your message...", key="user_input")
 with col2:
     st.button("Send", on_click=handle_message)
+
+# Check if enter was pressed in the input field
+if "user_input" in st.session_state and st.session_state.user_input:
+    handle_message()
