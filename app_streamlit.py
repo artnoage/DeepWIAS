@@ -98,48 +98,53 @@ with col1:
 with col2:
     send_button = st.button("Send")
 
-# Process input when either the input field is submitted or send button is clicked
-if user_input and (st.session_state.user_input != "" or send_button):
-
-# This block is replaced by the new input handling above
-    # Test connection first
-    connection_test = test_connection()
-    if not connection_test['success']:
-        st.error(f"Error: {connection_test['error']}")
-    else:
-        # Add user message to chat
-        st.session_state.messages.append({"role": "user", "content": user_input})
-        st.markdown(f"<div class='user-message'>{user_input}</div>", unsafe_allow_html=True)
-        
-        # Prepare API call
-        api_messages = [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]
-        
-        try:
-            # Call API
-            with st.spinner("Thinking..."):
-                response = requests.post(
-                    'http://10.8.85.181:9002/v1/chat/completions',
-                    headers={
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer EMPTY'
-                    },
-                    json={
-                        'model': 'unsloth/Phi-4',
-                        'messages': api_messages,
-                        'max_tokens': 50,
-                        'temperature': 0
-                    }
-                )
-                
-                data = response.json()
-                bot_response = data['choices'][0]['message']['content']
-                
-                # Add bot response to chat
-                st.session_state.messages.append({"role": "assistant", "content": bot_response})
-                st.markdown(f"<div class='bot-message'>{bot_response}</div>", unsafe_allow_html=True)
-                
-        except Exception as e:
-            st.error(f"Error: {str(e)}")
-        
-        # Clear the input box - no need for experimental_rerun
+# Define a function to handle message submission
+def handle_message():
+    if st.session_state.user_input:
+        user_message = st.session_state.user_input
+        # Test connection first
+        connection_test = test_connection()
+        if not connection_test['success']:
+            st.error(f"Error: {connection_test['error']}")
+        else:
+            # Add user message to chat
+            st.session_state.messages.append({"role": "user", "content": user_message})
+            
+            # Prepare API call
+            api_messages = [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]
+            
+            try:
+                # Call API
+                with st.spinner("Thinking..."):
+                    response = requests.post(
+                        'http://10.8.85.181:9002/v1/chat/completions',
+                        headers={
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer EMPTY'
+                        },
+                        json={
+                            'model': 'unsloth/Phi-4',
+                            'messages': api_messages,
+                            'max_tokens': 50,
+                            'temperature': 0
+                        }
+                    )
+                    
+                    data = response.json()
+                    bot_response = data['choices'][0]['message']['content']
+                    
+                    # Add bot response to chat
+                    st.session_state.messages.append({"role": "assistant", "content": bot_response})
+                    
+            except Exception as e:
+                st.error(f"Error: {str(e)}")
+            
+        # Clear the input box
         st.session_state.user_input = ""
+
+# Process input when send button is clicked or enter is pressed
+col1, col2 = st.columns([5, 1])
+with col1:
+    st.text_input("Type your message...", key="user_input", on_change=handle_message if st.session_state.user_input else None)
+with col2:
+    st.button("Send", on_click=handle_message)
