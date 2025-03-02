@@ -53,7 +53,7 @@ with col2:
 def test_connection():
     try:
         response = requests.post(
-            'http://10.8.85.181:9002/v1/chat/completions',
+            'http://10.8.85.181:9000/v1/chat/completions',
             headers={
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer EMPTY'
@@ -110,7 +110,7 @@ def handle_message():
                 # Call API
                 with st.spinner("Thinking..."):
                     response = requests.post(
-                        'http://10.8.85.181:9002/v1/chat/completions',
+                        'http://10.8.85.181:9000/v1/chat/completions',
                         headers={
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer EMPTY'
