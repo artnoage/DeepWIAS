@@ -138,10 +138,8 @@ def handle_message():
 # User input with send button
 col1, col2 = st.columns([5, 1])
 with col1:
-    st.text_input("Type your message...", key="user_input")
+    st.text_input("Type your message...", key="user_input", on_change=handle_message)
 with col2:
     st.button("Send", on_click=handle_message)
 
-# Check if enter was pressed in the input field
-if "user_input" in st.session_state and st.session_state.user_input:
-    handle_message()
+# Instead of automatically calling handle_message, use on_change for the text input
