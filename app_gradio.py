@@ -8,7 +8,7 @@ messages = []
 def test_connection():
     try:
         response = requests.post(
-            'http://10.8.85.181:9000/v1/chat/completions',
+            'http://10.8.85.181:9002/v1/chat/completions',
             headers={
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer EMPTY'
@@ -58,7 +58,7 @@ def chat_with_bot(message, history):
     
     try:
         response = requests.post(
-            'http://10.8.85.181:9000/v1/chat/completions',
+            'http://10.8.85.181:9002/v1/chat/completions',
             headers={
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer EMPTY'
