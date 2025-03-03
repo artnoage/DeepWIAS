@@ -1,4 +1,4 @@
 aider --model openai/mistralai/Mistral-Small-24B-Instruct-2501
 export OPENAI_API_BASE=http://10.8.85.181:9002/v1
- aider --model openai/mistralai/Mistral-Small-24B-Instruct-2501 --openai-api-key aha --openai_api_base http://10.8.85.181:9002/v1
+aider --model openai/mistralai/Mistral-Small-24B-Instruct-2501 --openai-api-key aha --openai-api-base http://10.8.85.181:9002/v1
  
